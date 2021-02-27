@@ -1,11 +1,31 @@
 {% load static %}
 
+<head>
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<script>
+function validateForm() {
+  var x = document.forms["form"]["make"].value;
+  if (x == "") {
+    alert("Name must be filled out");
+    return false;
+  }
+}
+</script>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'polls:index' %}">Home</a>
+            <a class="nav-item nav-link" href="{% url 'polls:ingredients' %}">Add Ingredient</a>
+            <a class="nav-item nav-link" href="{% url 'polls:units' %}">Add Unit</a>
+        </div>
+    </div>
+</nav>
 {% if alphabetical_meals_list %}
-    <form method = "POST" action="{% url 'polls:shoplist' %}">
+    <form name = "form" method = "POST" action="{% url 'polls:shoplist' %}">
     {% csrf_token %}
     {% for meal in alphabetical_meals_list %}
         <input type="checkbox" name="Meal{{meal.id}}" value="{{meal.id}}">
@@ -19,7 +39,7 @@
 {% endif %}
 <form method = "POST" action="{% url 'polls:index' %}">
 {% csrf_token %}
-    <input type="text" name ="newmeal" placeholder ="Add meal here"></input>
-    <button type="submit">Make</button>
+    <input onsubmit="return validateForm()" type="text" name ="newmeal" placeholder ="Add meal here" required></input>
+    <button type="submit" name="make">Make</button>
 </form>
 </body>

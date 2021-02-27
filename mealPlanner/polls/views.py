@@ -114,8 +114,10 @@ from .generate_list import generate
 def user_view(request):
     if request.method == "POST":
         name = request.POST['newmeal']
-        meal = Meal(meal_name=name)
-        meal.save()
+        test = name.strip()
+        if len(test) != 0:
+            meal = Meal(meal_name=name)
+            meal.save()
         return HttpResponseRedirect(reverse('polls:index'))
     
 
@@ -136,7 +138,7 @@ def list_view(request):
     ingredients = generate(meals)
     print(ingredients)
 
-    return render(request, 'polls/shoppinglist.html', {"ingredient_pairs":ingredients})
+    return render(request, 'polls/shoppinglist.html', {"ingredient_list":ingredients})
     
     
 
@@ -144,8 +146,10 @@ def list_view(request):
 def ing_view(request):
     if request.method == "POST":
         name = request.POST['newing']
-        ing = Ingredient(ingredient_name=name)
-        ing.save()
+        test = name.split()
+        if len(test) != 0:
+            ing = Ingredient(ingredient_name=name)
+            ing.save()
         return HttpResponseRedirect(reverse('polls:ingredients'))
     
 
@@ -157,8 +161,10 @@ def ing_view(request):
 def unit_view(request):
     if request.method == "POST":
         name = request.POST['newunit']
-        unit = Unit(unit=name)
-        unit.save()
+        test = name.split()
+        if len(test) != 0:
+            unit = Unit(unit=name)
+            unit.save()
         return HttpResponseRedirect(reverse('polls:units'))
     
 
@@ -172,12 +178,17 @@ def unit_view(request):
 def meal_view(request, meal_id):
 
     if request.method == "POST":
-        ingredient = request.POST['ingredient']
-        unit = request.POST['unit']
         qty = request.POST['qty']
-        meal = Meal.objects.get(pk=meal_id)
-        added_ingredient = MealIngredient(meal=meal, ingredient=Ingredient.objects.get(pk=ingredient), quantity=int(qty), unit=Unit.objects.get(pk=unit))
-        added_ingredient.save()
+        test = qty.split()
+        if len(test) != 0:
+            try:
+                ingredient = request.POST['ingredient']
+                unit = request.POST['unit']
+                meal = Meal.objects.get(pk=meal_id)
+                added_ingredient = MealIngredient(meal=meal, ingredient=Ingredient.objects.get(pk=ingredient), quantity=int(qty), unit=Unit.objects.get(pk=unit))
+                added_ingredient.save()
+            except MultiValueDictKeyError:
+                pass
         return HttpResponseRedirect(reverse('polls:detail', args=(meal_id,)))
 
     try:
