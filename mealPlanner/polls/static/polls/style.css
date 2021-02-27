@@ -29,3 +29,30 @@ div{
     transition: 0.5s;
     color: #dc3545;
 }
+.c-header{
+    justify-self: center;
+
+}
+div.heading{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.intro-heading{
+    color: aliceblue;
+    justify-content: center; 
+    display: flex; 
+    align-items: center;
+}
+.mask{
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.mb-3{
+    font-size: x-large;
+}
+.login{
+    display: block;
+    justify-content: left;
+}

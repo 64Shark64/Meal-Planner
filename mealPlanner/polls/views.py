@@ -83,8 +83,41 @@
 #         return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
    
 
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from django.views import generic
+
+from .models import Meal, Ingredient, MealIngredient
+
+class UserView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'alphabetical_meals_list'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Meal.objects.order_by('meal_name')
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+class LoginView(generic.DetailView):
+    template_name = 'polls/login.html'
+
+
+def meal_view(request, meal_id):
+    try:
+        ingredients = MealIngredient.objects.filter(meal=meal_id)
+        #ing = []
+        #for tmp in ingredients:
+         #   ing.append(Ingredient.objects.get(pk=tmp.))
+        #print(ingredients)
+        meal = Meal.objects.get(pk=meal_id)
+        #print(meal)
+    except MealIngredient.DoesNotExist:
+        raise Http404("There is no such meal!")
+
+    #return render(request, 'polls/detail.html', {'ingredients':ing, 'meal':meal})
+    return render(request, 'polls/detail.html', {'mealname':meal, 'mi':ingredients})
+
+
+# def index(request):
+#     return HttpResponse("Hello, world. You're at the polls index.")
