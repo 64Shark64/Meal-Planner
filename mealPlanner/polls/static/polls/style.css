@@ -25,3 +25,7 @@ div{
     background-color: bisque;
 }
 
+.form-check-input:checked[type=radio]{
+    transition: 0.5s;
+    color: #dc3545;
+}
