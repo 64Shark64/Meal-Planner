@@ -90,6 +90,7 @@ from django.views import generic
 from django.utils.datastructures import MultiValueDictKeyError
 
 from .models import Meal, Ingredient, MealIngredient, Unit
+from .generate_list import generate
 
 # class UserView(generic.ListView):
 #     try:
@@ -123,6 +124,23 @@ def user_view(request):
 
     return render(request, 'polls/index.html', {'alphabetical_meals_list':meals})
 
+def list_view(request):
+    meals = []
+    for key, value in request.POST.items():
+        try:
+            value = int(value)
+        except ValueError:
+            continue
+        
+        meals.append(Meal.objects.get(pk=int(value)))
+    ingredients = generate(meals)
+    print(ingredients)
+
+    return render(request, 'polls/shoppinglist.html', {"ingredient_pairs":ingredients})
+    
+    
+
+
 def ing_view(request):
     if request.method == "POST":
         name = request.POST['newing']
@@ -138,13 +156,13 @@ def ing_view(request):
 
 def unit_view(request):
     if request.method == "POST":
-        name = request.POST['newing']
+        name = request.POST['newunit']
         unit = Unit(unit=name)
         unit.save()
         return HttpResponseRedirect(reverse('polls:units'))
     
 
-    un = Ingredient.objects.order_by('unit')
+    un = Unit.objects.order_by('unit')
 
     return render(request, 'polls/units.html', {'units':un})       
 

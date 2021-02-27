@@ -5,9 +5,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <body>
 {% if alphabetical_meals_list %}
-    <form class="down">
+    <form method = "POST" action="{% url 'polls:shoplist' %}">
+    {% csrf_token %}
     {% for meal in alphabetical_meals_list %}
-        <input type="checkbox" id="Meal{{meal.id}}" value="{{meal.id}}">
+        <input type="checkbox" name="Meal{{meal.id}}" value="{{meal.id}}">
         <label for="Meal{{meal.id}}"><a href="{% url 'polls:detail' meal.id %}">{{ meal.meal_name }}</a></label>
         </br>
     {% endfor %}
