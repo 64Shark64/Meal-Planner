@@ -1,0 +1,27 @@
+body{
+    background-color:rgb(127, 210, 221);
+    font-size: xx-large;
+    padding: 2rem;
+}
+a:not(:hover){
+    transition-duration: 0.5s;
+    color: rgb(68, 67, 67);
+}
+a:hover{
+    transition-duration: 0.5s;
+    color: whitesmoke;
+}
+a:visted{
+    color: green;
+}
+div{
+    padding: 1rem;
+}
+.btn-check{
+    background-color: #0d6efd;
+}
+.submit{
+    border: none;
+    background-color: bisque;
+}
+
