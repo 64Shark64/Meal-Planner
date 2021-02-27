@@ -87,36 +87,90 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+from django.utils.datastructures import MultiValueDictKeyError
 
-from .models import Meal, Ingredient, MealIngredient
+from .models import Meal, Ingredient, MealIngredient, Unit
 
-class UserView(generic.ListView):
-    template_name = 'polls/index.html'
-    context_object_name = 'alphabetical_meals_list'
+# class UserView(generic.ListView):
+#     try:
+#         name = request.POST['newmeal']
+#         meal = Meal(meal_name=name)
+#         meal.save()
+#     except:
+#         pass
+#     template_name = 'polls/index.html'
+#     context_object_name = 'alphabetical_meals_list'
 
-    def get_queryset(self):
-        """Return the last five published questions."""
-        return Meal.objects.order_by('meal_name')
+#     def get_queryset(self):
+#         """Return the last five published questions."""
+#         print(Meal.objects.order_by('meal_name'))
+#         return Meal.objects.order_by('meal_name')
 
 
-class LoginView(generic.DetailView):
-    template_name = 'polls/login.html'
+# def login_view(request):
+#     return render(request, 'polls/login.html')
+
+def user_view(request):
+    if request.method == "POST":
+        name = request.POST['newmeal']
+        meal = Meal(meal_name=name)
+        meal.save()
+        return HttpResponseRedirect(reverse('polls:index'))
+    
+
+    meals = Meal.objects.order_by('meal_name')
+    print(meals)
+
+    return render(request, 'polls/index.html', {'alphabetical_meals_list':meals})
+
+def ing_view(request):
+    if request.method == "POST":
+        name = request.POST['newing']
+        ing = Ingredient(ingredient_name=name)
+        ing.save()
+        return HttpResponseRedirect(reverse('polls:ingredients'))
+    
+
+    ings = Ingredient.objects.order_by('ingredient_name')
+
+    return render(request, 'polls/ingredients.html', {'ings':ings})       
+
+
+def unit_view(request):
+    if request.method == "POST":
+        name = request.POST['newing']
+        unit = Unit(unit=name)
+        unit.save()
+        return HttpResponseRedirect(reverse('polls:units'))
+    
+
+    un = Ingredient.objects.order_by('unit')
+
+    return render(request, 'polls/units.html', {'units':un})       
+
+
 
 
 def meal_view(request, meal_id):
+
+    if request.method == "POST":
+        ingredient = request.POST['ingredient']
+        unit = request.POST['unit']
+        qty = request.POST['qty']
+        meal = Meal.objects.get(pk=meal_id)
+        added_ingredient = MealIngredient(meal=meal, ingredient=Ingredient.objects.get(pk=ingredient), quantity=int(qty), unit=Unit.objects.get(pk=unit))
+        added_ingredient.save()
+        return HttpResponseRedirect(reverse('polls:detail', args=(meal_id,)))
+
     try:
         ingredients = MealIngredient.objects.filter(meal=meal_id)
-        #ing = []
-        #for tmp in ingredients:
-         #   ing.append(Ingredient.objects.get(pk=tmp.))
-        #print(ingredients)
+        alling = Ingredient.objects.all()
+        allunits = Unit.objects.all()
         meal = Meal.objects.get(pk=meal_id)
-        #print(meal)
     except MealIngredient.DoesNotExist:
         raise Http404("There is no such meal!")
 
-    #return render(request, 'polls/detail.html', {'ingredients':ing, 'meal':meal})
-    return render(request, 'polls/detail.html', {'mealname':meal, 'mi':ingredients})
+    return render(request, 'polls/detail.html', {'meal':meal, 'mi':ingredients, 'ing':alling, 'units':allunits})
 
 
 # def index(request):

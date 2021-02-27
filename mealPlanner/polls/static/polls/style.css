@@ -1,7 +1,10 @@
-body{
+ body{
     background-color:rgb(127, 210, 221);
     font-size: xx-large;
     padding: 2rem;
+} 
+a{
+    text-decoration: none;
 }
 a:not(:hover){
     transition-duration: 0.5s;
@@ -55,4 +58,8 @@ div.heading{
 .login{
     display: block;
     justify-content: left;
+}
+.down{
+    /* display: flex;
+    flex-direction: column; */
 }

@@ -1,0 +1,22 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<body>
+{% if ings %}
+    <ul>
+    {% for i in ings %}
+        <li>{{ i.ingredient_name }}</li>
+    {% endfor %}
+    </ul>
+        
+{% else %}
+    <p>You have not made any ingredients.</p>
+{% endif %}
+<form method = "POST" action="{% url 'polls:ingredients' %}">
+{% csrf_token %}
+    <input type="text" name ="newing" placeholder ="Add ingredient here"></input>
+    <button type="submit">Make</button>
+</form>
+</body>

@@ -1,12 +1,15 @@
-from django.urls import path
+from django.urls import path, include
+from django.contrib import admin
 
 from . import views
 
 app_name = 'polls'
 urlpatterns = [
-    path('', views.UserView.as_view(), name='index'),
-    path('login/', views.LoginView.as_view(), name='login'),
+    path('', views.user_view, name='index'),
+    path('ingredients/', views.ing_view, name='ingredients'),
     path('<int:meal_id>/', views.meal_view, name='detail'),
+    # path('making/', views.make_meal, name='making'),
+    # path('login/', views.login_view, name='login'),
     # path('<int:question_id>/', views.detail, name='detail'),
     # path('<int:question_id>/results/', views.results, name='results'),
     # path('<int:question_id>/vote/', views.vote, name='vote'),
